@@ -3465,6 +3465,76 @@ class XayaRegtest(XayaTestnet):
     GENESIS_HASH = ('6f750b36d22f1dc3d0a6e483af453010'
                     '22646dfc3b3ba2187865f5a7d6d83ab1')
     RPC_PORT = 18493
+    
+
+class SpaceXpanse(NameIndexMixin, AuxPowMixin, Coin):
+    NAME = "SpaceXpanse"
+    SHORTNAME = "ROD"
+    NET = "mainnet"
+    XPUB_VERBYTES = bytes.fromhex("0488e4ad")
+    XPRV_VERBYTES = bytes.fromhex("04881eb2")
+    P2PKH_VERBYTE = bytes.fromhex("4b")
+    P2SH_VERBYTES = (bytes.fromhex("4e"),)
+    WIF_BYTE = bytes.fromhex("50")
+    GENESIS_HASH = ('83b7d8b4f0cf60b2e1b6cfff6732045b'
+                    'd4f30a1f86d8d50ce1b3c4eb64c79a0a')
+    TX_COUNT = 1
+    TX_COUNT_HEIGHT = 1
+    TX_PER_BLOCK = 2
+    DESERIALIZER = lib_tx.DeserializerSpaceXpanse
+    TRUNCATED_HEADER_SIZE = 80 + 5
+    RPC_PORT = 11998
+    PEERS = [
+#        'seed1.spacexpanse.net s50002',
+#        'seed2.spacexapnse.net s50002',
+    ]
+
+    # Op-codes for name operations
+    OP_NAME_REGISTER = OpCodes.OP_1
+    OP_NAME_UPDATE = OpCodes.OP_2
+
+    # Valid name prefixes.
+    NAME_REGISTER_OPS = [OP_NAME_REGISTER, "name", -1, OpCodes.OP_2DROP,
+                         OpCodes.OP_DROP]
+    NAME_UPDATE_OPS = [OP_NAME_UPDATE, "name", -1, OpCodes.OP_2DROP,
+                       OpCodes.OP_DROP]
+    NAME_OPERATIONS = (
+        NAME_REGISTER_OPS,
+        NAME_UPDATE_OPS,
+    )
+
+    @classmethod
+    def genesis_block(cls, block):
+        super().genesis_block(block)
+
+        # In SpaceXanse, the genesis block's coinbase is spendable.  Thus unlike
+        # the generic genesis_block() method, we return the full block here.
+        return block
+
+
+class SpaceXpanseTestnet(SpaceXpanse):
+    SHORTNAME = "RODTN"
+    NET = "testnet"
+    P2PKH_VERBYTE = bytes.fromhex("89")
+    P2SH_VERBYTES = (bytes.fromhex("8c"),)
+    WIF_BYTE = bytes.fromhex("8e")
+    GENESIS_HASH = ('742f607f632e7843243420b198dbdf21'
+                    '54aa795d1c9b6f60dc7560e974c1b881')
+    TX_COUNT = 1
+    TX_COUNT_HEIGHT = 1
+    TX_PER_BLOCK = 1
+    RPC_PORT = 18398
+    PEERS = [
+ #       'seed1.testnet.spacexpanse.net t s',
+    ]
+
+
+class SpaceXpanseRegtest(SpaceXpanseTestnet):
+    NET = "regtest"
+    GENESIS_HASH = ('08601bb356c19063840030e5e70b02bc'
+                    '768975435c77cf0ac76f25be050f340a')
+    RPC_PORT = 18498
+
 
 # Source: https://github.com/GZR0/GRZ0
 
